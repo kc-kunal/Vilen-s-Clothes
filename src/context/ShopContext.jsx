@@ -54,7 +54,9 @@ export const ShopProvider = ({ children }) => {
 
   const openAuth = (mode = 'login') => {
     setAuthMode(mode);
-    setIsAuthOpen(true);
+    setIsAuthOpen(false); // No popup modal!
+    setCurrentView('auth');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const closeAuth = () => {
@@ -289,6 +291,8 @@ export const ShopProvider = ({ children }) => {
         login,
         register,
         loginWithGoogle,
+        loginGoogle: loginWithGoogle,
+        navigateToAuth: openAuth,
         sendPasswordReset,
         logout,
         // Filters & Search
