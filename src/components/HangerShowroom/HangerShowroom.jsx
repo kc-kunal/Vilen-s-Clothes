@@ -1,8 +1,8 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useShop } from '../../context/ShopContext';
 import './HangerShowroom.css';
 
-// 8 Streetwear T-Shirts for the Hanging Rack (Using user-provided side & front PNGs)
+// 8 Streetwear T-Shirts for the Hanging Rack
 const RACK_ITEMS = [
   {
     id: 'tee-acid-mecha',
@@ -29,54 +29,54 @@ const RACK_ITEMS = [
     name: 'Acid-Wash Grunge Mineral Tee',
     price: 699,
     originalPrice: 1299,
-    colorName: 'Charcoal Mineral Wash',
+    colorName: 'Acid Wash Grey',
     filterClass: 'filter-charcoal',
-    graphic: 'GRUNGE // VAULT',
-    graphicColor: '#e4e4e7'
-  },
-  {
-    id: 'tee-gothic-raw',
-    name: 'Gothic Raw Hem Heavyweight Tee',
-    price: 699,
-    originalPrice: 1299,
-    colorName: 'Obsidian Black',
-    filterClass: 'filter-obsidian',
-    graphic: 'GOTHIC // RAW 280',
-    graphicColor: '#ffd600'
-  },
-  {
-    id: 'pack-tokyo-cyber',
-    name: 'Cyberpunk Tokyo Boxy Drop Tee',
-    price: 749,
-    originalPrice: 1449,
-    colorName: 'Anthracite Dark',
-    filterClass: 'filter-anthracite',
-    graphic: 'TOKYO // NIGHTS',
-    graphicColor: '#00f5d4'
-  },
-  {
-    id: 'pack-monochrome-minimal',
-    name: 'Monochrome Minimal Boxy Tee',
-    price: 649,
-    originalPrice: 1199,
-    colorName: 'Bone Ivory White',
-    filterClass: 'filter-bone',
-    graphic: 'MINIMAL // 260 GSM',
-    graphicColor: '#27272a'
-  },
-  {
-    id: 'pack-shadow-tech',
-    name: 'Shadow Tactical Heavyweight Tee',
-    price: 799,
-    originalPrice: 1499,
-    colorName: 'Matte Stealth Black',
-    filterClass: 'filter-stealth',
-    graphic: 'TACTICAL // SPEC-07',
+    graphic: 'OVERDOSE // RAW',
     graphicColor: '#ff5400'
   },
   {
-    id: 'tee-moss-green',
-    name: 'Acid Moss Vintage Drop Tee',
+    id: 'tee-tokyo-cyber',
+    name: 'Cyber Samurai Oversized Tee',
+    price: 749,
+    originalPrice: 1399,
+    colorName: 'Obsidian Black',
+    filterClass: 'filter-obsidian',
+    graphic: 'CYBER // SHOGUN',
+    graphicColor: '#00f0ff'
+  },
+  {
+    id: 'tee-heavy-mineral',
+    name: 'Mineral Stone Heavyweight Tee',
+    price: 799,
+    originalPrice: 1499,
+    colorName: 'Anthracite Dark Grey',
+    filterClass: 'filter-anthracite',
+    graphic: 'HEAVY // 260GSM',
+    graphicColor: '#ffffff'
+  },
+  {
+    id: 'pack-tokyo-night',
+    name: 'Minimalist Tokyo Studio Boxy Tee',
+    price: 699,
+    originalPrice: 1299,
+    colorName: 'Bone Chalk White',
+    filterClass: 'filter-bone',
+    graphic: 'TOKYO // STUDIO',
+    graphicColor: '#111111'
+  },
+  {
+    id: 'tee-speed-stealth',
+    name: 'Formula Speed Stealth Tee',
+    price: 749,
+    originalPrice: 1399,
+    colorName: 'Stealth Black',
+    filterClass: 'filter-stealth',
+    graphic: 'PIT LANE // 01',
+    graphicColor: '#ffd600'
+  },
+  {
+    id: 'tee-grunge-moss',
+    name: 'Acid Moss Heavyweight Boxy Tee',
     price: 749,
     originalPrice: 1399,
     colorName: 'Acid Moss Green',
@@ -91,7 +91,12 @@ export const HangerShowroom = () => {
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [scrollSway, setScrollSway] = useState(0);
 
-  // Scroll sway physics (item jo tange honge to scroll pr hilne chahiye)
+  // Touch & Swipe tracking
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isSwiping = useRef(false);
+
+  // Scroll sway physics
   const lastScrollY = useRef(0);
   const decayTimeout = useRef(null);
 
@@ -101,15 +106,14 @@ export const HangerShowroom = () => {
       const deltaY = currentY - lastScrollY.current;
       lastScrollY.current = currentY;
 
-      // Calculate inertia sway angle based on scroll speed (clamp -12deg to +12deg)
-      const swayAngle = Math.max(-12, Math.min(12, deltaY * 0.4));
+      // Softened sway angle for smooth feel on mobile & desktop (clamp -8deg to +8deg)
+      const swayAngle = Math.max(-8, Math.min(8, deltaY * 0.25));
       setScrollSway(swayAngle);
 
-      // Smoothly return to resting position after scroll pauses
       clearTimeout(decayTimeout.current);
       decayTimeout.current = setTimeout(() => {
         setScrollSway(0);
-      }, 180);
+      }, 160);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -136,6 +140,33 @@ export const HangerShowroom = () => {
     openProductDetail(matched);
   };
 
+  const handleItemTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isSwiping.current = false;
+  };
+
+  const handleItemTouchMove = (e) => {
+    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+    if (dx > 10 || dy > 10) {
+      isSwiping.current = true;
+    }
+  };
+
+  const handleItemInteraction = (item, index) => {
+    if (isSwiping.current) {
+      return; // Was swiping, don't trigger click
+    }
+    // If not hovered/active yet, reveal front view on tap!
+    if (hoveredIdx !== index) {
+      setHoveredIdx(index);
+    } else {
+      // Second tap navigates to product
+      handleTeeClick(item);
+    }
+  };
+
   const scrollToProducts = () => {
     setActiveCategory('packs');
     const elem = document.getElementById('products-section');
@@ -148,41 +179,41 @@ export const HangerShowroom = () => {
   };
 
   return (
-    <section className="hanger-hero-wrapper text-center pt-3 pb-4">
+    <section className="hanger-hero-wrapper text-center pt-2 pt-md-3 pb-3 pb-md-4">
       <div className="container-fluid px-0">
-        
-
         {/* Hero Headline above Hanger */}
-        <div className="hero-headline-container mb-3">
+        <div className="hero-headline-container mb-2 mb-md-3">
           <h1 className="hero-headline mb-0">
             1,50,000+ FITS STYLED.
           </h1>
-          <h2 className="hero-subheadline mb-3">
+          <h2 className="hero-subheadline mb-2 mb-md-3">
             Yours next.
           </h2>
           <div className="mobile-scroll-hint d-inline-flex d-md-none">
-            <i className="bi bi-chevron-left me-1"></i> Swipe rack to explore 8 fits <i className="bi bi-chevron-right ms-1"></i>
+            <i className="bi bi-chevron-left me-1"></i> Swipe rack to view 8 fits <i className="bi bi-chevron-right ms-1"></i>
           </div>
         </div>
 
         {/* 3D Clothing Rail Arena */}
-        <div className="clothes-rail-stage mb-4">
-          <div className="rack-scroll-viewport">
+        <div className="clothes-rail-stage mb-3 mb-md-4">
+          <div 
+            className="rack-scroll-viewport"
+            onTouchStart={handleItemTouchStart}
+            onTouchMove={handleItemTouchMove}
+          >
             <div className="rack-assembly-container">
-              {/* Solid Metallic Wardrobe Bar (Hooks clamp directly onto this bar with ZERO gap!) */}
+              {/* Solid Metallic Wardrobe Bar */}
               <div className="showroom-rail-bar">
                 <div className="rail-tube"></div>
                 <div className="rail-bracket bracket-left"></div>
                 <div className="rail-bracket bracket-right"></div>
               </div>
 
-              {/* Hanging Clothes Track (Snug rack spacing, collar inside hanger, zero floating gap) */}
+              {/* Hanging Clothes Track */}
               <div className="rail-hangers-track">
                 {RACK_ITEMS.map((item, index) => {
                   const isHovered = hoveredIdx === index;
                   
-                  // Shift items aside when an item is hovered:
-                  // Left items shift left, right items shift right
                   let shiftClass = '';
                   if (hoveredIdx !== null) {
                     if (index < hoveredIdx) {
@@ -198,15 +229,14 @@ export const HangerShowroom = () => {
                       className={`rail-hanging-item ${isHovered ? 'active-front' : ''} ${shiftClass}`}
                       onMouseEnter={() => setHoveredIdx(index)}
                       onMouseLeave={() => setHoveredIdx(null)}
-                      onClick={() => handleTeeClick(item)}
+                      onClick={() => handleItemInteraction(item, index)}
                       style={{
                         '--scroll-sway-deg': `${scrollSway}deg`
                       }}
                     >
-                      {/* Hanger Hook + Authentic Showroom Price Tag (Directly hooked on the metallic bar!) */}
+                      {/* Hanger Hook + Authentic Showroom Price Tag */}
                       <div className="hanger-top-hook">
                         <svg className="hanger-hook-svg" viewBox="0 0 50 48" fill="none">
-                          {/* Chrome hook wrapping cleanly over the bar */}
                           <path 
                             d="M25 42 L25 24 C25 14, 18 6, 26 1 C32 -2, 38 1, 36 8 C35 13, 29 15, 25 18" 
                             stroke="#52525b" 
@@ -222,7 +252,6 @@ export const HangerShowroom = () => {
                             fill="none" 
                             strokeOpacity="0.8"
                           />
-                          {/* Wooden Hanger Shoulders inside collar */}
                           <path 
                             d="M4 46 Q25 35 46 46" 
                             stroke="#18181b" 
@@ -232,19 +261,15 @@ export const HangerShowroom = () => {
                           />
                         </svg>
 
-                        {/* Small Showroom Price Tag clipped to hanger neck */}
+                        {/* Showroom Price Tag */}
                         <div className="hanger-neck-tag">
                           <span className="tag-currency">₹</span>{item.price}
                         </div>
                       </div>
 
-                      {/* 
-                        T-SHIRT DISPLAY:
-                        - Collar fits directly under the hanger shoulder (no floating gap)
-                        - Snug, realistic boutique spacing between items
-                      */}
+                      {/* T-Shirt Canvas */}
                       <div className="tshirt-canvas-wrap">
-                        {/* Side-view Image (Default) */}
+                        {/* Side-view Image */}
                         <img 
                           src="/tees/tee-side.png" 
                           alt={`${item.name} side`}
@@ -252,7 +277,7 @@ export const HangerShowroom = () => {
                           loading="lazy"
                         />
 
-                        {/* Front-view Image (Smoothly revealed on hover) */}
+                        {/* Front-view Image */}
                         <div className="front-reveal-box">
                           <img 
                             src="/tees/tee-front.png" 
@@ -260,11 +285,14 @@ export const HangerShowroom = () => {
                             className={`tee-asset-front ${item.filterClass}`}
                             loading="lazy"
                           />
-                          {/* Minimalist Graphic Print on chest in front view */}
                           <div className="front-chest-graphic">
                             <div className="graphic-brand-title" style={{ color: item.graphicColor }}>
                               {item.graphic}
                             </div>
+                          </div>
+                          {/* Mobile & Desktop Action Badge */}
+                          <div className="front-view-cta">
+                            <span>VIEW FIT →</span>
                           </div>
                         </div>
                       </div>
@@ -276,8 +304,8 @@ export const HangerShowroom = () => {
           </div>
         </div>
 
-        {/* Action Buttons (Hero Section CTAs) */}
-        <div className="d-flex justify-content-center align-items-center gap-3 flex-wrap mb-4">
+        {/* Action Buttons */}
+        <div className="hero-action-buttons d-flex justify-content-center align-items-center gap-2 gap-md-3 mb-3 mb-md-4 px-3">
           <button 
             className="btn-hero-primary"
             onClick={scrollToProducts}
@@ -293,7 +321,7 @@ export const HangerShowroom = () => {
         </div>
 
         {/* Trust Badges Bar */}
-        <div className="hero-trust-bar py-2 px-3 rounded-3 mx-auto d-flex justify-content-around flex-wrap gap-2">
+        <div className="hero-trust-bar py-2 px-3 rounded-3 mx-auto">
           <div className="trust-item">
             <i className="bi bi-shield-check text-dark me-1"></i>
             <span>240+ GSM Combed French Terry</span>
