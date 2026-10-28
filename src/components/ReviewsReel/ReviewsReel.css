@@ -70,3 +70,30 @@
   font-style: italic;
   color: #f1f1f1;
 }
+
+
+/* Mobile Reviews Adjustments */
+@media (max-width: 576px) {
+  .review-reel-overlay {
+    padding: 8px !important;
+  }
+
+  .buyer-badge {
+    font-size: 0.55rem;
+    padding: 1px 5px;
+  }
+
+  .review-quote-text {
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+
+  .review-meta {
+    margin-top: 4px !important;
+    padding-top: 4px !important;
+  }
+
+  .review-meta .fw-bold {
+    font-size: 0.72rem;
+  }
+}

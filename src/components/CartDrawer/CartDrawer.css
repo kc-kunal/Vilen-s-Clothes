@@ -258,3 +258,19 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+
+/* Mobile Drawer Adjustments */
+@media (max-width: 480px) {
+  .cart-drawer-panel {
+    max-width: 100%;
+  }
+
+  .cart-drawer-header {
+    padding: 12px 16px;
+  }
+
+  .cart-drawer-footer {
+    padding: 12px 16px;
+  }
+}

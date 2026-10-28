@@ -190,3 +190,44 @@
  transform: translateY(-2px);
  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
 }
+
+
+/* Mobile Bundle Customizer Refinements */
+@media (max-width: 768px) {
+  .bundle-main-heading {
+    font-size: clamp(1.8rem, 6.5vw, 2.5rem);
+  }
+
+  .customizer-card {
+    padding: 1rem !important;
+    border-radius: 12px;
+  }
+
+  .picker-tile img {
+    height: 72px;
+  }
+
+  .picker-caption {
+    font-size: 0.62rem;
+    padding: 3px 4px;
+  }
+
+  .bundle-sz-btn {
+    padding: 3px 8px;
+    font-size: 0.7rem;
+  }
+
+  .bundle-summary-card {
+    padding: 1.25rem !important;
+    border-radius: 12px;
+  }
+
+  .bundle-final-price {
+    font-size: 1.25rem;
+  }
+
+  .btn-add-bundle-pill {
+    padding: 10px 16px;
+    font-size: 0.84rem;
+  }
+}

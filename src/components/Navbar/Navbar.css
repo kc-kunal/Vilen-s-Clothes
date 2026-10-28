@@ -117,3 +117,55 @@
  border-top: 1px solid #f0f0f0;
  }
 }
+
+
+/* Mobile Header & Brand Scaling */
+@media (max-width: 991px) {
+  .site-header .container-fluid {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .brand-name {
+    font-size: 1.55rem;
+  }
+
+  .brand-tag {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    padding: 2px 4px;
+    margin-left: 3px;
+  }
+
+  .mobile-expanded {
+    background: #ffffff;
+    padding: 1rem 0;
+    border-top: 1px solid #f0f0f0;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .search-box-input input {
+    width: 140px;
+  }
+
+  .cart-trigger-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-name {
+    font-size: 1.35rem;
+  }
+
+  .brand-tag {
+    display: none;
+  }
+
+  .cart-trigger-btn {
+    padding: 5px 8px;
+    font-size: 0.78rem;
+  }
+}

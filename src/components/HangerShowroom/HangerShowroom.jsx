@@ -160,6 +160,9 @@ export const HangerShowroom = () => {
           <h2 className="hero-subheadline mb-3">
             Yours next.
           </h2>
+          <div className="mobile-scroll-hint d-inline-flex d-md-none">
+            <i className="bi bi-chevron-left me-1"></i> Swipe rack to explore 8 fits <i className="bi bi-chevron-right ms-1"></i>
+          </div>
         </div>
 
         {/* 3D Clothing Rail Arena */}

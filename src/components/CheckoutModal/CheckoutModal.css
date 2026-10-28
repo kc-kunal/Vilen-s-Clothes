@@ -145,3 +145,17 @@
 .summary-item-price {
   font-size: 0.85rem;
 }
+
+
+/* Mobile Checkout Adjustments */
+@media (max-width: 768px) {
+  .checkout-container {
+    max-height: 98vh;
+    border-radius: 12px;
+  }
+
+  .checkout-form-side,
+  .checkout-summary-side {
+    padding: 1rem !important;
+  }
+}

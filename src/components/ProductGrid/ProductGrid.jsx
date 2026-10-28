@@ -31,7 +31,7 @@ export const ProductGrid = () => {
             </button>
           </div>
 
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4">
+          <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-md-4">
             {filteredProducts.map(product => (
               <div key={product.id} className="col">
                 <ProductCard product={product} />
@@ -66,7 +66,7 @@ export const ProductGrid = () => {
             </button>
           </div>
 
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4">
+          <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-md-4">
             {packs.map(product => (
               <div key={product.id} className="col">
                 <ProductCard product={product} />
@@ -92,7 +92,7 @@ export const ProductGrid = () => {
             </button>
           </div>
 
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4">
+          <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-md-4">
             {tees.map(product => (
               <div key={product.id} className="col">
                 <ProductCard product={product} />
@@ -118,7 +118,7 @@ export const ProductGrid = () => {
             </button>
           </div>
 
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4">
+          <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-md-4">
             {otherDrops.map(product => (
               <div key={product.id} className="col">
                 <ProductCard product={product} />
