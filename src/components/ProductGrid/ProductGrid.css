@@ -1,0 +1,38 @@
+﻿.collection-section {
+ position: relative;
+}
+
+.section-kicker {
+ font-size: 0.72rem;
+ font-weight: 800;
+ letter-spacing: 0.12em;
+ color: #ff5400;
+ text-transform: uppercase;
+ display: block;
+ margin-bottom: 2px;
+}
+
+.section-heading {
+ font-family: 'Bebas Neue', 'Oswald', sans-serif;
+ font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+ letter-spacing: 0.04em;
+ color: #111111;
+ line-height: 1;
+}
+
+.section-link-btn {
+ background: transparent;
+ border: none;
+ font-size: 0.85rem;
+ font-weight: 700;
+ color: #111111;
+ text-decoration: underline;
+ text-underline-offset: 4px;
+ cursor: pointer;
+ padding: 0;
+ transition: color 0.2s ease;
+}
+
+.section-link-btn:hover {
+ color: #ff5400;
+}

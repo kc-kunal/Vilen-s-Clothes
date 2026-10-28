@@ -1,0 +1,49 @@
+﻿.why-us-section {
+  background: #fbfaf8;
+  border-top: 1px solid #eeebe4;
+  border-bottom: 1px solid #eeebe4;
+}
+
+.why-heading {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: clamp(2rem, 3.8vw, 2.8rem);
+  letter-spacing: 0.04em;
+  color: #111111;
+  line-height: 1;
+}
+
+.why-card {
+  background: #ffffff;
+  border: 1px solid #e8e5de;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
+}
+
+.why-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+
+.why-stat-num {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: 2.8rem;
+  letter-spacing: 0.02em;
+  color: #ff5400;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.why-card-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.why-card-desc {
+  font-size: 0.82rem;
+  color: #666666;
+  line-height: 1.5;
+}

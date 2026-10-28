@@ -1,0 +1,72 @@
+﻿.reviews-section {
+  background: #ffffff;
+  border-top: 1px solid #eeebe4;
+}
+
+.reviews-heading {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  letter-spacing: 0.05em;
+  color: #111111;
+  line-height: 1;
+}
+
+.review-reel-card {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease;
+  height: 100%;
+}
+
+.review-reel-card:hover {
+  transform: translateY(-5px);
+}
+
+.review-img-wrapper {
+  position: relative;
+  aspect-ratio: 9/16;
+  background: #111;
+  overflow: hidden;
+}
+
+.review-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.review-reel-card:hover .review-img-wrapper img {
+  transform: scale(1.05);
+}
+
+.review-reel-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0,0,0,0.15) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px;
+  color: #ffffff;
+}
+
+.buyer-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.review-quote-text {
+  font-size: 0.76rem;
+  line-height: 1.35;
+  font-style: italic;
+  color: #f1f1f1;
+}

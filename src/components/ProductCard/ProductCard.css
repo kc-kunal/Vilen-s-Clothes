@@ -1,0 +1,207 @@
+﻿.product-card-wrap {
+ cursor: pointer;
+ transition: transform 0.25s ease;
+}
+
+.product-card-wrap:hover {
+ transform: translateY(-4px);
+}
+
+.product-card-inner {
+ background: #ffffff;
+ border: 1px solid #e8e5de;
+ border-radius: 12px;
+ overflow: hidden;
+ display: flex;
+ flex-direction: column;
+ height: 100%;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.product-img-box {
+ position: relative;
+ width: 100%;
+ padding-top: 120%; /* 4:5 vertical aesthetic ratio */
+ background: #f4f3ef;
+ overflow: hidden;
+}
+
+.product-img {
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ transition: transform 0.4s ease;
+}
+
+.product-card-wrap:hover .product-img {
+ transform: scale(1.04);
+}
+
+.badges-container {
+ position: absolute;
+ top: 10px;
+ left: 10px;
+ display: flex;
+ flex-direction: column;
+ gap: 5px;
+ z-index: 2;
+}
+
+.badge-pill {
+ font-size: 0.65rem;
+ font-weight: 800;
+ letter-spacing: 0.06em;
+ padding: 3px 8px;
+ border-radius: 4px;
+ text-transform: uppercase;
+}
+
+.badge-pill.bestseller {
+ background: #ffd600;
+ color: #111111;
+}
+
+.badge-pill.hot {
+ background: #ff5400;
+ color: #ffffff;
+}
+
+.badge-pill.sale {
+ background: #111111;
+ color: #ffffff;
+}
+
+.card-rating-pill {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+ background: rgba(255, 255, 255, 0.92);
+ backdrop-filter: blur(4px);
+ padding: 2px 8px;
+ border-radius: 16px;
+ font-size: 0.7rem;
+ font-weight: 700;
+ color: #222;
+ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+ z-index: 2;
+}
+
+.card-rating-pill .review-count {
+ color: #888;
+ font-size: 0.65rem;
+ margin-left: 2px;
+}
+
+/* Quick size selector shown on card hover */
+.quick-sizes-bar {
+ position: absolute;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ background: rgba(17, 17, 17, 0.88);
+ backdrop-filter: blur(6px);
+ padding: 6px 10px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 6px;
+ transform: translateY(100%);
+ transition: transform 0.25s ease;
+ z-index: 3;
+}
+
+.product-card-wrap:hover .quick-sizes-bar {
+ transform: translateY(0);
+}
+
+.quick-sizes-bar .size-label {
+ color: #fff;
+ font-size: 0.68rem;
+ font-weight: 700;
+ text-transform: uppercase;
+ margin-right: 4px;
+}
+
+.quick-sz-btn {
+ background: rgba(255, 255, 255, 0.15);
+ border: 1px solid rgba(255, 255, 255, 0.3);
+ color: #fff;
+ font-size: 0.68rem;
+ font-weight: 800;
+ width: 26px;
+ height: 26px;
+ border-radius: 4px;
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.quick-sz-btn.active, .quick-sz-btn:hover {
+ background: #ffffff;
+ color: #111111;
+ border-color: #ffffff;
+}
+
+.product-info-box {
+ padding: 12px 14px 14px;
+ display: flex;
+ flex-direction: column;
+ flex-grow: 1;
+}
+
+.product-title {
+ font-family: 'Plus Jakarta Sans', sans-serif;
+ font-size: 0.95rem;
+ font-weight: 700;
+ color: #111111;
+ margin-bottom: 4px;
+ line-height: 1.3;
+}
+
+.piece-breakdown {
+ font-size: 0.73rem;
+ font-weight: 700;
+ color: #198754; /* Clean green like posterized screenshot */
+ margin-bottom: 4px;
+ display: flex;
+ align-items: center;
+}
+
+.sale-price {
+ font-size: 1.15rem;
+ font-weight: 800;
+ color: #111111;
+}
+
+.mrp-price {
+ font-size: 0.85rem;
+ color: #888888;
+}
+
+/* Posterized Black Pill Add to Cart CTA */
+.btn-add-cart-pill {
+ background: #111111;
+ color: #ffffff;
+ border: none;
+ font-family: 'Plus Jakarta Sans', sans-serif;
+ font-size: 0.82rem;
+ font-weight: 800;
+ padding: 9px 16px;
+ border-radius: 26px;
+ letter-spacing: 0.02em;
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: all 0.2s ease;
+ margin-top: auto;
+}
+
+.btn-add-cart-pill:hover {
+ background: #2d2d2d;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}

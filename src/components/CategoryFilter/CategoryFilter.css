@@ -1,0 +1,58 @@
+﻿.category-filter-wrapper {
+ background: #fbfaf8;
+ position: sticky;
+ top: 56px;
+ z-index: 1010;
+ border-bottom: 1px solid #eae7df;
+ backdrop-filter: blur(8px);
+}
+
+.category-scroll-container {
+ overflow-x: auto;
+ scrollbar-width: none;
+ -ms-overflow-style: none;
+}
+
+.category-scroll-container::-webkit-scrollbar {
+ display: none;
+}
+
+.cat-chip-btn {
+ background: #ffffff;
+ border: 1.5px solid #dedad1;
+ color: #333333;
+ font-family: 'Plus Jakarta Sans', sans-serif;
+ font-size: 0.82rem;
+ font-weight: 700;
+ padding: 8px 18px;
+ border-radius: 30px;
+ white-space: nowrap;
+ display: inline-flex;
+ align-items: center;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ flex-shrink: 0;
+}
+
+.cat-chip-btn:hover {
+ border-color: #111111;
+ color: #111111;
+ background: #f5f4f0;
+}
+
+.cat-chip-btn.active {
+ background: #111111;
+ color: #ffffff;
+ border-color: #111111;
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.chip-hot-tag {
+ background: #ff3b30;
+ color: #fff;
+ font-size: 0.6rem;
+ font-weight: 800;
+ padding: 1px 5px;
+ border-radius: 6px;
+ margin-left: 6px;
+}
