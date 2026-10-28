@@ -150,14 +150,17 @@ export const HangerShowroom = () => {
   return (
     <section className="hanger-hero-wrapper text-center pt-3 pb-4">
       <div className="container-fluid px-0">
-        {/*
-          =======================================================
-          USER COMMENTED OUT AS REQUESTED:
-          - Rating Trust Badge (★★★★★ RATED 4.9/5 BY 85,000+...)
-          - Main Headline (1,50,000+ FITS STYLED. Yours next.)
-          - Subhead (Layers that hang right. Hover to inspect front cut...)
-          =======================================================
-        */}
+        
+
+        {/* Hero Headline above Hanger */}
+        <div className="hero-headline-container mb-3">
+          <h1 className="hero-headline mb-0">
+            1,50,000+ FITS STYLED.
+          </h1>
+          <h2 className="hero-subheadline mb-3">
+            Yours next.
+          </h2>
+        </div>
 
         {/* 3D Clothing Rail Arena */}
         <div className="clothes-rail-stage mb-4">

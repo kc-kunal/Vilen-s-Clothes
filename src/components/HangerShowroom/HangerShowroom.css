@@ -398,3 +398,30 @@
     height: 190px;
   } */
 }
+
+/* ==========================================================================
+   Hero Headlines above Hanger (Requested by User)
+   ========================================================================== */
+.hero-headline-container {
+  padding: 0 1rem;
+}
+
+.hero-headline {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #111111;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.hero-subheadline {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  font-weight: 800;
+  color: #ff5400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
