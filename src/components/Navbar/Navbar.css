@@ -169,3 +169,62 @@
     font-size: 0.78rem;
   }
 }
+
+
+/* User VIP Pill & Dropdown */
+.user-pill-btn {
+  background: #f4f3ef;
+  border: 1.5px solid #dedad1;
+  color: #111111;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  max-width: 130px;
+}
+
+.user-pill-btn:hover {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.user-vip-dot {
+  color: #ff5400;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: 115%;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e8e5de;
+  min-width: 200px;
+  z-index: 1050;
+  animation: fadeInDown 0.2s ease-out;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-item-custom {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #333333;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item-custom:hover {
+  background: #f4f3ef;
+  color: #111111;
+}

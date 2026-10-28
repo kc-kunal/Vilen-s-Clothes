@@ -17,6 +17,7 @@ import { SizeGuideModal } from './components/SizeGuideModal/SizeGuideModal';
 import { OrderSuccessModal } from './components/OrderSuccessModal/OrderSuccessModal';
 import { TrackOrderModal } from './components/TrackOrderModal/TrackOrderModal';
 import { LiveToast } from './components/LiveToast/LiveToast';
+import { AuthModal } from './components/AuthModal/AuthModal';
 import './App.css';
 
 function MainAppContent() {
@@ -53,6 +54,7 @@ function MainAppContent() {
       <SizeGuideModal />
       <OrderSuccessModal />
       <TrackOrderModal />
+      <AuthModal />
       <LiveToast />
     </div>
   );

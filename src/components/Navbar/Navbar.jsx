@@ -12,8 +12,13 @@ export const Navbar = () => {
     searchQuery,
     setSearchQuery,
     currentView,
-    backToHome
+    backToHome,
+    currentUser,
+    openAuth,
+    logout
   } = useShop();
+
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -106,6 +111,20 @@ export const Navbar = () => {
                   Reviews
                 </a>
               </li>
+              <li className="nav-item d-lg-none mt-2 pt-2 border-top">
+                {currentUser ? (
+                  <div className="d-flex justify-content-between align-items-center px-2 py-1">
+                    <span className="small fw-bold">⚡ {currentUser.displayName}</span>
+                    <button className="btn btn-sm btn-outline-danger py-0 px-2 rounded-pill" onClick={() => { logout(); setMobileMenuOpen(false); }}>
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <button className="btn btn-sm btn-dark w-100 rounded-pill py-2" onClick={() => { openAuth('login'); setMobileMenuOpen(false); }}>
+                    ⚡ Sign In / Join Crew (3D)
+                  </button>
+                )}
+              </li>
             </ul>
           </div>
 
@@ -146,6 +165,52 @@ export const Navbar = () => {
             >
               <i className="bi bi-truck"></i>
             </button>
+
+            {/* User Profile / 3D Auth Modal Trigger */}
+            {currentUser ? (
+              <div className="user-dropdown-wrap position-relative">
+                <button 
+                  className="user-pill-btn d-flex align-items-center gap-1"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  title="Your Vilen's VIP Profile"
+                >
+                  <span className="user-vip-dot">⚡</span>
+                  <span className="user-name-short text-truncate">
+                    {currentUser.displayName ? currentUser.displayName.split(' ')[0] : 'Crew'}
+                  </span>
+                  <i className="bi bi-chevron-down small" style={{ fontSize: '0.65rem' }}></i>
+                </button>
+
+                {userMenuOpen && (
+                  <div className="user-dropdown-menu shadow-lg p-2 rounded-3">
+                    <div className="user-menu-header px-2 py-1 mb-1 border-bottom">
+                      <div className="fw-bold small text-truncate">{currentUser.displayName || 'Vilen Crew Member'}</div>
+                      <div className="text-muted" style={{ fontSize: '0.72rem' }}>{currentUser.email}</div>
+                    </div>
+                    <button 
+                      className="dropdown-item-custom w-100 text-start py-1 px-2 rounded"
+                      onClick={() => { openTrackOrder(); setUserMenuOpen(false); }}
+                    >
+                      <i className="bi bi-box-seam me-2"></i>My Orders & Tracking
+                    </button>
+                    <button 
+                      className="dropdown-item-custom w-100 text-start py-1 px-2 rounded text-danger"
+                      onClick={() => { logout(); setUserMenuOpen(false); }}
+                    >
+                      <i className="bi bi-box-arrow-right me-2"></i>Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button 
+                className="action-icon-btn user-auth-btn"
+                onClick={() => openAuth('login')}
+                title="Sign in / Join Crew"
+              >
+                <i className="bi bi-person fs-5"></i>
+              </button>
+            )}
 
             {/* Cart Button with Count & Quick Total */}
             <button 

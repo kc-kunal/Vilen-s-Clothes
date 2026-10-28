@@ -1,5 +1,13 @@
-﻿import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PRODUCTS, CROSS_SELL_ADDONS } from '../data/products';
+import { 
+  subscribeToAuth, 
+  loginUser, 
+  registerUser, 
+  loginWithGoogle as firebaseGoogleLogin, 
+  resetPassword as firebaseResetPassword, 
+  logoutUser 
+} from '../firebase/authService';
 
 const ShopContext = createContext();
 
@@ -21,13 +29,64 @@ export const ShopProvider = ({ children }) => {
     }
   });
 
-  // UI Modals state (Cart drawer, Size guide, Checkout, Track order, Success)
+  // UI Modals state
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isTrackOrderOpen, setIsTrackOrderOpen] = useState(false);
   const [isOrderSuccessOpen, setIsOrderSuccessOpen] = useState(false);
   const [lastPlacedOrder, setLastPlacedOrder] = useState(null);
+
+  // Auth & Firebase State
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register' | 'forgot'
+
+  // Listen to Firebase Auth state
+  useEffect(() => {
+    const unsubscribe = subscribeToAuth((user) => {
+      setCurrentUser(user);
+    });
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
+  }, []);
+
+  const openAuth = (mode = 'login') => {
+    setAuthMode(mode);
+    setIsAuthOpen(true);
+  };
+
+  const closeAuth = () => {
+    setIsAuthOpen(false);
+  };
+
+  const login = async (email, password) => {
+    const user = await loginUser(email, password);
+    setCurrentUser(user);
+    return user;
+  };
+
+  const register = async (name, email, password) => {
+    const user = await registerUser(name, email, password);
+    setCurrentUser(user);
+    return user;
+  };
+
+  const loginWithGoogle = async () => {
+    const user = await firebaseGoogleLogin();
+    setCurrentUser(user);
+    return user;
+  };
+
+  const sendPasswordReset = async (email) => {
+    return await firebaseResetPassword(email);
+  };
+
+  const logout = async () => {
+    await logoutUser();
+    setCurrentUser(null);
+  };
 
   // Filters & Search
   const [activeCategory, setActiveCategory] = useState('all');
@@ -45,7 +104,7 @@ export const ShopProvider = ({ children }) => {
     }
   }, [cart]);
 
-  // Navigate to single product PAGE (no popup!)
+  // Navigate to single product PAGE
   const openProductDetail = (product) => {
     setSelectedProduct(product);
     setCurrentView('product');
@@ -220,6 +279,19 @@ export const ShopProvider = ({ children }) => {
           setIsOrderSuccessOpen(true);
         },
         closeOrderSuccess: () => setIsOrderSuccessOpen(false),
+        // Auth & Firebase
+        currentUser,
+        isAuthOpen,
+        authMode,
+        setAuthMode,
+        openAuth,
+        closeAuth,
+        login,
+        register,
+        loginWithGoogle,
+        sendPasswordReset,
+        logout,
+        // Filters & Search
         activeCategory,
         setActiveCategory,
         searchQuery,
