@@ -1,632 +1,858 @@
 /* =========================================================================
-   DEDICATED FULL AUTH PAGE (VILEN'S STREETWEAR COLLECTIVE)
+   VILEN'S CLOTHES - FULL-PAGE EDGE-TO-EDGE SLIDING AUTH
+   Streetwear Palette: #111111 (Black), #ff5400 (Orange), #ffffff (White)
+   Font: 'Bebas Neue' & 'Plus Jakarta Sans'
    ========================================================================= */
 
-.auth-page-wrapper {
-  min-height: calc(100vh - 120px);
-  background: radial-gradient(circle at 15% 20%, rgba(138, 43, 226, 0.08) 0%, transparent 40%),
-              radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 45%),
-              #08080a;
-  color: #f1f1f5;
-  padding-bottom: 4rem;
+.vilen-auth-fullscreen {
+  width: 100%;
+  min-height: calc(100vh - 72px);
   position: relative;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Background grid overlay */
-.auth-page-wrapper::before {
+/* Floating Back Button (Top Left) */
+.vilen-top-nav-bar {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.5rem;
+  z-index: 120;
+}
+
+.vilen-back-btn {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #e8e5de;
+  color: #111111;
+  padding: 0.45rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease;
+}
+
+.vilen-back-btn:hover {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+  transform: translateX(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================================================
+   FULLSCREEN SLIDING CONTAINER
+   ========================================================================= */
+
+.vilen-fullscreen-slider {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  overflow: hidden;
+  background: #ffffff;
+  display: flex;
+}
+
+/* -------------------------------------------------------------------------
+   SPLIT FORM PANELS (Takes 50% width on Desktop)
+   ------------------------------------------------------------------------- */
+
+.vilen-split-form-panel {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  transition: all 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.vilen-form-inner-wrapper {
+  max-width: 440px;
+  width: 100%;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Brand Badge inside form */
+.vilen-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.vilen-brand-badge .brand-bolt {
+  font-size: 1.15rem;
+  color: #ff5400;
+}
+
+.vilen-brand-badge .brand-title {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  color: #111111;
+  line-height: 1;
+}
+
+.vilen-brand-badge .brand-tag {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  background: #111111;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.vilen-brand-badge.brand-light .brand-title {
+  color: #ffffff;
+}
+
+.vilen-brand-badge.brand-light .brand-tag {
+  background: #ffffff;
+  color: #111111;
+}
+
+/* Form Titles (Bebas Neue Streetwear aesthetic) */
+.vilen-form-head {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: clamp(2.4rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #111111;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.vilen-form-sub {
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+/* Circular Social Buttons */
+.vilen-social-circles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.vilen-circle-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid #e8e5de;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  cursor: pointer;
+  background: #ffffff;
+  color: #111111;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vilen-circle-btn.btn-google {
+  color: #ea4335;
+}
+
+.vilen-circle-btn.btn-google:hover {
+  background: #ea4335;
+  color: #ffffff;
+  border-color: #ea4335;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(234, 67, 53, 0.35);
+}
+
+.vilen-circle-btn.btn-facebook {
+  color: #1877f2;
+}
+
+.vilen-circle-btn.btn-facebook:hover {
+  background: #1877f2;
+  color: #ffffff;
+  border-color: #1877f2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(24, 119, 242, 0.35);
+}
+
+.vilen-circle-btn.btn-twitter {
+  color: #111111;
+}
+
+.vilen-circle-btn.btn-twitter:hover {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(17, 17, 17, 0.35);
+}
+
+/* Subdivider text */
+.vilen-subdivider {
+  font-size: 0.82rem;
+  color: #8c8c9a;
+  font-weight: 500;
+}
+
+/* Alerts */
+.vilen-alert {
+  width: 100%;
+  padding: 0.6rem 0.95rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.vilen-alert.alert-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.vilen-alert.alert-success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Pill Input Fields */
+.vilen-pill-input-field {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.vilen-pill-input-field .lead-icon {
+  position: absolute;
+  left: 1.15rem;
+  color: #94a3b8;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.vilen-pill-input-field input {
+  background-color: #fbfaf8;
+  border: 1.5px solid #e8e5de;
+  padding: 0.75rem 2.8rem 0.75rem 2.8rem;
+  border-radius: 9999px;
+  width: 100%;
+  font-size: 0.92rem;
+  color: #111111;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.vilen-pill-input-field input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.vilen-pill-input-field input:focus {
+  background-color: #ffffff;
+  border-color: #ff5400;
+  box-shadow: 0 0 0 3px rgba(255, 84, 0, 0.15);
+}
+
+.vilen-pill-input-field input:focus + .lead-icon,
+.vilen-pill-input-field:focus-within .lead-icon {
+  color: #ff5400;
+}
+
+.vilen-eye-toggle {
+  position: absolute;
+  right: 1.15rem;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.vilen-eye-toggle:hover {
+  color: #ff5400;
+}
+
+.vilen-link-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.vilen-link-btn:hover {
+  color: #ff5400;
+  text-decoration: underline;
+}
+
+.vilen-coupon-badge {
+  background: #fffbeb;
+  border: 1.5px dashed #f59e0b;
+  color: #92400e;
+  border-radius: 9999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.76rem;
+  width: 100%;
+}
+
+/* Action Buttons (Pill Capsule) */
+.vilen-action-pill-btn {
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.82rem 2.8rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  line-height: 1;
+}
+
+.vilen-pill-primary {
+  border: none;
+  background: #ff5400;
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(255, 84, 0, 0.35);
+}
+
+.vilen-pill-primary:hover:not(:disabled) {
+  background: #111111;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.vilen-pill-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.vilen-pill-ghost {
+  background: transparent;
+  border: 2.5px solid #ffffff;
+  color: #ffffff;
+}
+
+.vilen-pill-ghost:hover {
+  background: #ffffff;
+  color: #111111;
+  transform: scale(1.04);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* -------------------------------------------------------------------------
+   DOUBLE SLIDER POSITIONS (DESKTOP)
+   ------------------------------------------------------------------------- */
+
+.sign-in-panel {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.vilen-fullscreen-slider.right-panel-active .sign-in-panel {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sign-up-panel {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.vilen-fullscreen-slider.right-panel-active .sign-up-panel {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  pointer-events: all;
+  animation: showSplitSignUp 0.65s;
+}
+
+@keyframes showSplitSignUp {
+  0%, 49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%, 100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   FULL-HEIGHT SLIDING OVERLAY (50% WIDTH)
+   ------------------------------------------------------------------------- */
+
+.vilen-split-overlay-slider {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: visible;
+  transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 100;
+}
+
+.vilen-fullscreen-slider.right-panel-active .vilen-split-overlay-slider {
+  transform: translateX(-100%);
+}
+
+/* -------------------------------------------------------------------------
+   ANIMATED T-SHIRT SHAPED BORDER CONTOUR (SEAMLESS CLIPPED OVERLAY)
+   ------------------------------------------------------------------------- */
+
+/* Inner Clipping Mask applying T-Shirt Silhouette directly to Overlay */
+.vilen-overlay-inner-clip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  clip-path: url(#tshirtClipLeft);
+  -webkit-clip-path: url(#tshirtClipLeft);
+  transition: clip-path 0.65s cubic-bezier(0.77, 0, 0.175, 1),
+              -webkit-clip-path 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+  filter: drop-shadow(-8px 0 16px rgba(0, 0, 0, 0.16));
+}
+
+.vilen-fullscreen-slider.right-panel-active .vilen-overlay-inner-clip {
+  clip-path: url(#tshirtClipRight);
+  -webkit-clip-path: url(#tshirtClipRight);
+  filter: drop-shadow(8px 0 16px rgba(0, 0, 0, 0.16));
+}
+
+/* Transparent Tailored Stitching Line (No Background Fill - 100% Seamless!) */
+.vilen-stitch-seam-wrap {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 50px;
+  height: 100%;
+  z-index: 35;
+  pointer-events: none;
+  transition: left 0.65s cubic-bezier(0.77, 0, 0.175, 1),
+              right 0.65s cubic-bezier(0.77, 0, 0.175, 1),
+              transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.vilen-fullscreen-slider.right-panel-active .vilen-stitch-seam-wrap {
+  left: auto;
+  right: -2px;
+  transform: scaleX(-1);
+}
+
+.vilen-stitch-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Animated Tailor Stitching Line */
+.animated-tshirt-stitch {
+  stroke-dasharray: 8 8;
+  animation: runTshirtStitch 6s linear infinite;
+}
+
+@keyframes runTshirtStitch {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 120;
+  }
+}
+
+/* Streetwear Woven Side-Seam Tag (Text is NEVER flipped or backwards!) */
+.vilen-woven-tag {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  background: #111111;
+  color: #ffffff;
+  border: 1.5px solid #ff5400;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  animation: tagBreezeBob 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 40;
+  transition: left 0.65s cubic-bezier(0.77, 0, 0.175, 1),
+              right 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.vilen-fullscreen-slider.right-panel-active .vilen-woven-tag {
+  left: auto;
+  right: 12px;
+}
+
+.vilen-woven-tag .tag-bolt {
+  color: #ff5400;
+  font-size: 0.75rem;
+}
+
+.vilen-woven-tag .tag-txt {
+  white-space: nowrap;
+}
+
+@keyframes tagBreezeBob {
+  0% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-46%) rotate(2deg);
+  }
+}
+
+.vilen-split-overlay {
+  background: linear-gradient(135deg, #0e0e0e 0%, #171717 40%, #ff5400 100%);
+  color: #ffffff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Background overlay grid and geometric lighting */
+.vilen-split-overlay::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
   pointer-events: none;
-  z-index: 0;
 }
 
-.auth-page-wrapper .container {
-  position: relative;
-  z-index: 1;
+.vilen-fullscreen-slider.right-panel-active .vilen-split-overlay {
+  transform: translateX(50%);
 }
 
-/* Top Back To Shop Button */
-.btn-back-to-shop {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e0e0ea;
-  padding: 0.55rem 1.15rem;
-  border-radius: 9999px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-}
-
-.btn-back-to-shop:hover {
-  background: #ffffff;
-  color: #000000;
-  transform: translateX(-4px);
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
-}
-
-.btn-back-to-shop i {
-  transition: transform 0.2s ease;
-}
-
-.btn-back-to-shop:hover i {
-  transform: translateX(-3px);
-}
-
-/* =========================================================================
-   LEFT COLUMN: BRAND PERKS & SOCIAL PROOF
-   ========================================================================= */
-
-.auth-brand-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.85rem;
-  background: rgba(0, 240, 255, 0.08);
-  border: 1px solid rgba(0, 240, 255, 0.25);
-  border-radius: 9999px;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  font-weight: 800;
-  color: #00f0ff;
-  text-transform: uppercase;
-}
-
-.badge-pulse {
-  width: 7px;
-  height: 7px;
-  background: #00f0ff;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #00f0ff;
-  animation: pulseNeon 1.5s infinite;
-}
-
-@keyframes pulseNeon {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.8; }
-}
-
-.auth-hero-title {
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  line-height: 1.08;
-  color: #ffffff;
-  font-family: inherit;
-  text-transform: uppercase;
-}
-
-.auth-hero-title span {
-  background: linear-gradient(135deg, #00f0ff 0%, #a855f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.auth-hero-lead {
-  font-size: 1.02rem;
-  color: #9ca3af;
-  line-height: 1.6;
-  max-width: 480px;
-}
-
-/* Perks List */
-.auth-perks-list {
+.vilen-overlay-screen {
+  position: absolute;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
-  gap: 1rem;
+  padding: 2rem 4rem;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.auth-perk-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 14px;
-  transition: transform 0.25s ease, border-color 0.25s ease;
-}
-
-.auth-perk-item:hover {
-  transform: translateX(6px);
-  border-color: rgba(0, 240, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.perk-icon-wrap {
-  width: 38px;
-  height: 38px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.15rem;
-  flex-shrink: 0;
-}
-
-.perk-title {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #ffffff;
-  margin-bottom: 0.15rem;
-}
-
-.perk-desc {
-  font-size: 0.82rem;
-  color: #8b8f9d;
-  line-height: 1.4;
-}
-
-/* Trust Box */
-.auth-trust-box {
-  background: rgba(18, 18, 24, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-}
-
-.trust-avatars {
-  gap: -6px;
-}
-
-.avatar-chip {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #20202a;
-  border: 2px solid #08080a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-}
-
-.trust-score {
+.vilen-overlay-head {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: clamp(2.8rem, 4.5vw, 4rem);
   font-weight: 800;
-  font-size: 0.92rem;
-  color: #ffd700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  line-height: 1;
+  text-transform: uppercase;
+  margin: 0;
 }
 
-.trust-sub {
-  font-size: 0.76rem;
-  color: #8b8f9d;
+.vilen-overlay-desc {
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.55;
+  max-width: 380px;
 }
 
-/* =========================================================================
-   RIGHT COLUMN: 3D AUTH CONTAINER & FLIPPER
-   ========================================================================= */
-
-.auth-stage-container {
-  max-width: 540px;
-  margin-left: auto;
-  margin-right: auto;
+.overlay-screen-left {
+  transform: translateX(-20%);
 }
 
-/* Tab Switcher */
-.auth-nav-tabs {
-  display: flex;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 5px;
-  border-radius: 16px;
-  gap: 6px;
+.vilen-fullscreen-slider.right-panel-active .overlay-screen-left {
+  transform: translateX(0);
 }
 
-.auth-tab-btn {
-  flex: 1;
-  padding: 0.65rem 1rem;
-  border-radius: 12px;
-  background: transparent;
-  border: none;
-  color: #8b8f9d;
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
+.overlay-screen-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.vilen-fullscreen-slider.right-panel-active .overlay-screen-right {
+  transform: translateX(20%);
+}
+
+/* -------------------------------------------------------------------------
+   ANIMATED STREETWEAR COMPOSITION IN OVERLAY
+   ------------------------------------------------------------------------- */
+
+.vilen-street-art-box {
+  position: relative;
+  width: 190px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.auth-tab-btn:hover {
+.art-pulse-glow {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 84, 0, 0.45) 0%, transparent 70%);
+  animation: pulseStreetGlow 3s infinite alternate ease-in-out;
+}
+
+.art-pulse-glow.orange-glow {
+  background: radial-gradient(circle, rgba(255, 214, 0, 0.4) 0%, transparent 70%);
+}
+
+@keyframes pulseStreetGlow {
+  0% { transform: scale(0.85); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 0.95; }
+}
+
+.floating-item {
+  position: absolute;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+  user-select: none;
+}
+
+.item-main {
+  font-size: 3.2rem;
+  animation: floatArtMain 4s infinite ease-in-out;
+}
+
+.item-kick {
+  font-size: 1.8rem;
+  top: 5px;
+  right: 15px;
+  animation: floatArtKick 5s infinite ease-in-out;
+}
+
+.item-bolt {
+  font-size: 1.6rem;
+  bottom: 8px;
+  left: 15px;
+  animation: floatArtBolt 4.5s infinite ease-in-out;
+}
+
+.item-star {
+  font-size: 1.3rem;
+  top: 10px;
+  left: 20px;
+  color: #ffd600;
+  animation: floatArtKick 3.5s infinite ease-in-out;
+}
+
+.item-coupon {
+  bottom: 0px;
+  right: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 9999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 800;
   color: #ffffff;
+  backdrop-filter: blur(8px);
+  animation: floatArtMain 4.5s infinite ease-in-out;
 }
 
-.auth-tab-btn.active {
-  background: #ffffff;
-  color: #000000;
-  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.25);
+@keyframes floatArtMain {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
 }
 
-/* 3D Card Shell */
-.auth-3d-card-shell {
-  perspective: 1200px;
-  transition: transform 0.15s ease-out;
+@keyframes floatArtKick {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(8px) rotate(-4deg); }
 }
 
-.auth-3d-flipper {
-  position: relative;
-  width: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+@keyframes floatArtBolt {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-7px) scale(1.1); }
 }
 
-.auth-3d-flipper.is-flipped {
-  transform: rotateY(180deg);
-}
+/* -------------------------------------------------------------------------
+   LOGGED-IN VIEW (FULLSCREEN)
+   ------------------------------------------------------------------------- */
 
-/* Faces */
-.auth-card-face {
-  width: 100%;
-  background: linear-gradient(145deg, rgba(24, 24, 30, 0.95) 0%, rgba(12, 12, 16, 0.98) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 24px;
-  padding: 2.25rem 2rem;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7),
-              0 0 35px rgba(138, 43, 226, 0.12);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.auth-card-front {
-  position: relative;
-  z-index: 2;
-  transform: rotateY(0deg);
-}
-
-.auth-card-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: rotateY(180deg);
-  z-index: 1;
-}
-
-.auth-3d-flipper.is-flipped .auth-card-back {
-  position: relative;
-  z-index: 2;
-}
-
-.auth-3d-flipper.is-flipped .auth-card-front {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-
-/* Card Header */
-.brand-hologram-seal {
-  display: inline-flex;
+.vilen-logged-container {
+  min-height: calc(100vh - 72px);
+  display: flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.vilen-logged-box {
+  background: #ffffff;
+  border: 1px solid #e8e5de;
+  border-radius: 28px;
+  padding: 3.5rem 2.8rem;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.08);
+}
+
+.logged-crown {
+  font-size: 2.8rem;
+  color: #ff5400;
+}
+
+.logged-vip-tag {
+  display: inline-block;
+  background: #fff7ed;
+  color: #ff5400;
+  border: 1px solid #fed7aa;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #ffd700;
-  margin-bottom: 0.5rem;
 }
 
-.auth-title {
-  font-size: 1.55rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  margin-bottom: 0.35rem;
-  text-transform: uppercase;
+.logged-user-name {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-size: 2.4rem;
+  color: #111111;
+  letter-spacing: 0.02em;
 }
 
-.auth-subtitle {
-  font-size: 0.86rem;
-  color: #8b8f9d;
-  line-height: 1.45;
-  margin-bottom: 0;
-}
-
-/* Alerts */
-.auth-error-banner {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
-  padding: 0.65rem 0.95rem;
+.logged-perk-pill {
+  background: #fbfaf8;
+  border: 1px solid #e8e5de;
   border-radius: 12px;
-  font-size: 0.84rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+/* -------------------------------------------------------------------------
+   MOBILE RESPONSIVENESS (< 992px)
+   ------------------------------------------------------------------------- */
+
+.vilen-mobile-tab-bar {
   display: flex;
-  align-items: center;
-}
-
-.auth-success-banner {
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  color: #86efac;
-  padding: 0.65rem 0.95rem;
-  border-radius: 12px;
-  font-size: 0.84rem;
-  display: flex;
-  align-items: center;
-}
-
-/* Form inputs */
-.form-floating-custom label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #c7c7d4;
-  margin-bottom: 0.4rem;
-  display: block;
-}
-
-.input-group-auth {
+  background: #f1f0eb;
+  border-radius: 9999px;
+  padding: 4px;
+  width: 280px;
+  margin: 1.5rem auto 1rem auto;
   position: relative;
-  display: flex;
-  align-items: center;
+  z-index: 20;
 }
 
-.input-group-auth i:first-child {
-  position: absolute;
-  left: 1rem;
-  color: #6b7280;
-  font-size: 1rem;
-  pointer-events: none;
-}
-
-.input-group-auth input {
-  width: 100%;
-  padding: 0.75rem 2.8rem 0.75rem 2.6rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  color: #ffffff;
-  font-size: 0.92rem;
-  font-weight: 500;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.input-group-auth input:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: #00f0ff;
-  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
-}
-
-.input-group-auth input::placeholder {
-  color: #555866;
-}
-
-.toggle-pass-btn {
-  position: absolute;
-  right: 0.85rem;
-  background: transparent;
-  border: none;
-  color: #8b8f9d;
-  font-size: 1.05rem;
-  cursor: pointer;
-  padding: 0.25rem;
-  transition: color 0.2s ease;
-}
-
-.toggle-pass-btn:hover {
-  color: #ffffff;
-}
-
-.forgot-link-btn {
-  background: transparent;
-  border: none;
-  color: #00f0ff;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.forgot-link-btn:hover {
-  color: #38bdf8;
-}
-
-/* Primary Button */
-.btn-auth-primary {
-  background: linear-gradient(135deg, #00f0ff 0%, #a855f7 100%);
-  border: none;
-  color: #000000;
-  font-weight: 800;
-  font-size: 0.96rem;
-  padding: 0.82rem 1.5rem;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  letter-spacing: -0.01em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-auth-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 240, 255, 0.35);
-  color: #000000;
-}
-
-.btn-auth-primary:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.btn-auth-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.btn-auth-secondary:hover {
-  background: rgba(255, 255, 255, 0.14);
-}
-
-/* Divider */
-.auth-divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #555866;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
+.m-tab-choice {
   flex: 1;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.auth-divider span {
-  padding: 0 0.85rem;
-}
-
-/* Google Button */
-.btn-google-auth {
-  background: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #0f172a;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: #64748b;
   font-weight: 700;
-  font-size: 0.92rem;
-  padding: 0.75rem 1.2rem;
-  border-radius: 14px;
+  font-size: 0.84rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.25s ease;
 }
 
-.btn-google-auth:hover:not(:disabled) {
-  background: #f1f5f9;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
-}
-
-/* Flip footer */
-.auth-flip-footer {
-  font-size: 0.85rem;
-  color: #8b8f9d;
-}
-
-.flip-trigger-btn {
-  background: transparent;
-  border: none;
-  color: #00f0ff;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  transition: color 0.2s ease;
-}
-
-.flip-trigger-btn:hover {
-  color: #a855f7;
-}
-
-/* VIP Bonus in register */
-.vip-bonus-banner {
-  background: rgba(255, 215, 0, 0.08);
-  border: 1px dashed rgba(255, 215, 0, 0.35);
-  border-radius: 12px;
-  padding: 0.65rem 0.85rem;
-  font-size: 0.78rem;
-  color: #ffd700;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.bonus-pill {
-  font-weight: 800;
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
+.m-tab-choice.active {
+  background: #111111;
   color: #ffffff;
-  background: rgba(255, 215, 0, 0.2);
-  display: inline-block;
-  padding: 0.1rem 0.45rem;
-  border-radius: 6px;
-  width: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-
-/* Already logged in view */
-.auth-logged-card {
-  max-width: 480px;
-  background: rgba(24, 24, 30, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-}
-
-.logged-badge {
-  display: inline-block;
-  background: rgba(0, 240, 255, 0.1);
-  color: #00f0ff;
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  padding: 0.35rem 0.85rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 800;
-}
-
-/* =========================================================================
-   MOBILE RESPONSIVENESS
-   ========================================================================= */
 
 @media (max-width: 991.98px) {
-  .auth-hero-title {
-    font-size: 2.2rem;
+  .vilen-fullscreen-slider {
+    min-height: auto;
+    flex-direction: column;
   }
-  .auth-stage-container {
-    max-width: 100%;
-  }
-  .auth-card-face {
-    padding: 1.75rem 1.25rem;
-    border-radius: 20px;
-  }
-}
 
-@media (max-width: 575.98px) {
-  .auth-page-wrapper {
-    padding-bottom: 2.5rem;
+  .vilen-split-overlay-slider {
+    display: none;
   }
-  .auth-hero-title {
-    font-size: 1.85rem;
+
+  .vilen-split-form-panel {
+    position: relative;
+    width: 100% !important;
+    transform: none !important;
+    opacity: 1 !important;
+    display: none;
+    min-height: auto;
   }
-  .auth-hero-lead {
-    font-size: 0.92rem;
+
+  .vilen-fullscreen-slider:not(.right-panel-active) .sign-in-panel {
+    display: flex;
+    animation: mobileSlideFade 0.35s ease forwards;
   }
-  .auth-card-face {
-    padding: 1.4rem 1rem;
-    border-radius: 18px;
+
+  .vilen-fullscreen-slider.right-panel-active .sign-up-panel {
+    display: flex;
+    animation: mobileSlideFade 0.35s ease forwards;
   }
-  .auth-title {
-    font-size: 1.35rem;
+
+  .vilen-form-inner-wrapper {
+    padding: 1.5rem 1.25rem 3rem 1.25rem;
   }
-  .input-group-auth input {
-    font-size: 0.88rem;
-    padding: 0.7rem 2.6rem 0.7rem 2.4rem;
+
+  .vilen-top-nav-bar {
+    position: relative;
+    top: auto;
+    left: auto;
+    padding: 1rem 1rem 0 1rem;
   }
-  .btn-auth-primary {
-    font-size: 0.9rem;
-    padding: 0.75rem 1rem;
+
+  @keyframes mobileSlideFade {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

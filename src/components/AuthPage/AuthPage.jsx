@@ -26,6 +26,8 @@ export const AuthPage = () => {
   const [regConfirmPass, setRegConfirmPass] = useState('');
   const [showRegPass, setShowRegPass] = useState(false);
 
+  // Forgot Password inline state
+  const [isForgotView, setIsForgotView] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotSent, setForgotSent] = useState(false);
 
@@ -34,58 +36,58 @@ export const AuthPage = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  // 3D Mouse Parallax Tilt for desktop
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Clear messages when mode toggles
+  // Sync isForgotView if authMode changed externally
   useEffect(() => {
+    if (authMode === 'forgot') {
+      setIsForgotView(true);
+    } else {
+      setIsForgotView(false);
+    }
     setErrorMsg('');
     setSuccessMsg('');
     setForgotSent(false);
   }, [authMode]);
 
-  // If already logged in, show profile summary or option to go home
+  // If already logged in, show user profile card
   if (currentUser) {
     return (
-      <div className="auth-page-container">
-        <div className="auth-page-inner text-center py-5">
-          <div className="auth-logged-card mx-auto">
-            <div className="logged-badge mb-3">⚡ VIP MEMBER ACTIVE</div>
-            <h2 className="mb-2">Welcome Back, {currentUser.displayName || 'Vilen Crew'}!</h2>
+      <div className="vilen-auth-fullscreen">
+        <div className="vilen-top-nav-bar">
+          <button 
+            className="vilen-back-btn"
+            onClick={() => setCurrentView('home')}
+          >
+            <i className="bi bi-arrow-left"></i>
+            <span>Back to Store</span>
+          </button>
+        </div>
+
+        <div className="vilen-logged-container">
+          <div className="vilen-logged-box text-center">
+            <div className="logged-crown mb-2">⚡</div>
+            <div className="logged-vip-tag mb-3">VIP CREW MEMBER ACTIVE</div>
+            <h1 className="logged-user-name mb-2">Welcome Back, {currentUser.displayName || 'Vilen Insider'}!</h1>
             <p className="text-muted mb-4">{currentUser.email}</p>
-            <div className="d-flex justify-content-center gap-3">
-              <button 
-                className="btn-auth-primary"
-                onClick={() => setCurrentView('home')}
-              >
-                Continue Shopping Fits ➔
-              </button>
+            
+            <div className="logged-perk-pill mb-4">
+              <span>🎁 Exclusive <strong>10% Member Discount</strong> active on your account</span>
             </div>
+
+            <button 
+              className="vilen-action-pill-btn vilen-pill-primary"
+              onClick={() => setCurrentView('home')}
+            >
+              Continue Shopping Fits ➔
+            </button>
           </div>
         </div>
       </div>
     );
   }
-
-  const handleMouseMove = (e) => {
-    if (window.innerWidth < 992) return;
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    setTilt({
-      x: -(y / rect.height) * 8,
-      y: (x / rect.width) * 8
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
 
   // Login handler
   const handleLoginSubmit = async (e) => {
@@ -96,14 +98,14 @@ export const AuthPage = () => {
 
     try {
       await login(loginEmail, loginPassword);
-      addToast('Welcome back to Vilen\'s Crew! ⚡', 'success');
+      addToast("Welcome back to Vilen's Crew! ⚡", 'success');
       setCurrentView('home');
     } catch (err) {
       let msg = err.message || 'Login failed. Please check credentials.';
       if (msg.includes('auth/invalid-credential') || msg.includes('auth/wrong-password')) {
         msg = 'Invalid email or password. Please try again.';
       } else if (msg.includes('auth/user-not-found')) {
-        msg = 'No account found with this email. Please register below.';
+        msg = 'No account found with this email. Please register.';
       }
       setErrorMsg(msg);
     } finally {
@@ -157,7 +159,7 @@ export const AuthPage = () => {
     }
   };
 
-  // Reset password
+  // Reset password handler
   const handleResetSubmit = async (e) => {
     e.preventDefault();
     if (!forgotEmail) {
@@ -169,7 +171,7 @@ export const AuthPage = () => {
     try {
       await sendPasswordReset(forgotEmail);
       setForgotSent(true);
-      setSuccessMsg(`Password reset link has been dispatched to ${forgotEmail}.`);
+      setSuccessMsg(`Password reset instructions sent to ${forgotEmail}.`);
     } catch (err) {
       setErrorMsg(err.message || 'Failed to send reset link.');
     } finally {
@@ -177,12 +179,15 @@ export const AuthPage = () => {
     }
   };
 
+  const isRegister = authMode === 'register';
+
   return (
-    <div className="auth-page-wrapper">
-      {/* Top Breadcrumb Navigation */}
-      <div className="container auth-page-nav pt-4 pb-2">
+    <div className="vilen-auth-fullscreen">
+      
+      {/* Top Floating Back Button */}
+      <div className="vilen-top-nav-bar">
         <button 
-          className="btn-back-to-shop d-inline-flex align-items-center gap-2"
+          className="vilen-back-btn"
           onClick={() => setCurrentView('home')}
         >
           <i className="bi bi-arrow-left"></i>
@@ -190,440 +195,462 @@ export const AuthPage = () => {
         </button>
       </div>
 
-      <div className="container auth-page-main py-3 py-lg-4">
-        <div className="row align-items-center g-4 g-lg-5">
-          
-          {/* LEFT COLUMN: Streetwear VIP Brand Perks Showcase */}
-          <div className="col-12 col-lg-5 auth-brand-col">
-            <div className="auth-brand-badge mb-3">
-              <span className="badge-pulse"></span>
-              <span>VILEN'S CREW // AUTHENTIC ACCESS</span>
+      {/* Mobile Screen Switcher Pills */}
+      <div className="vilen-mobile-tab-bar d-lg-none">
+        <button 
+          type="button" 
+          className={`m-tab-choice ${!isRegister ? 'active' : ''}`}
+          onClick={() => {
+            setAuthMode('login');
+            setIsForgotView(false);
+          }}
+        >
+          Sign In
+        </button>
+        <button 
+          type="button" 
+          className={`m-tab-choice ${isRegister ? 'active' : ''}`}
+          onClick={() => {
+            setAuthMode('register');
+            setIsForgotView(false);
+          }}
+        >
+          Create Account
+        </button>
+      </div>
+
+      {/* FULL-PAGE SLIDING DUAL SPLIT CONTAINER */}
+      <div className={`vilen-fullscreen-slider ${isRegister ? 'right-panel-active' : ''}`}>
+        
+        {/* =========================================================
+            FORM 1: SIGN IN FORM (Left 50% by default)
+            ========================================================= */}
+        <div className="vilen-split-form-panel sign-in-panel">
+          <div className="vilen-form-inner-wrapper">
+            
+            {/* Brand Logo inside form */}
+            <div className="vilen-brand-badge mb-3">
+              <span className="brand-bolt">⚡</span>
+              <span className="brand-title">VILEN'S</span>
+              <span className="brand-tag">CLOTHES</span>
             </div>
 
-            <h1 className="auth-hero-title mb-3">
-              STEP INTO THE <span>VIP CLUB.</span>
-            </h1>
+            {isForgotView ? (
+              /* Inline Password Reset View */
+              <div className="vilen-forgot-subview w-100">
+                <h1 className="vilen-form-head mb-2">Reset Password</h1>
+                <p className="vilen-form-sub mb-4">
+                  Enter your registered email and we'll dispatch an official reset link.
+                </p>
 
-            <p className="auth-hero-lead mb-4">
-              Join 1,50,000+ fashion rebels. Get exclusive drop access, member-only pricing, and 3D outfit saves.
-            </p>
-
-            {/* Perks Cards */}
-            <div className="auth-perks-list mb-4">
-              <div className="auth-perk-item">
-                <div className="perk-icon-wrap">⚡</div>
-                <div className="perk-text">
-                  <div className="perk-title">Instant 10% Welcome Bonus</div>
-                  <div className="perk-desc">Auto-unlock code VILEN10 on your first fit order.</div>
-                </div>
-              </div>
-
-              <div className="auth-perk-item">
-                <div className="perk-icon-wrap">🚀</div>
-                <div className="perk-text">
-                  <div className="perk-title">Free Express Priority Delivery</div>
-                  <div className="perk-desc">Zero shipping charges across India for all crew members.</div>
-                </div>
-              </div>
-
-              <div className="auth-perk-item">
-                <div className="perk-icon-wrap">👕</div>
-                <div className="perk-text">
-                  <div className="perk-title">3D Hanger Showroom Customizer</div>
-                  <div className="perk-desc">Save custom fit combos & wishlist across all devices.</div>
-                </div>
-              </div>
-
-              <div className="auth-perk-item">
-                <div className="perk-icon-wrap">🛡️</div>
-                <div className="perk-text">
-                  <div className="perk-title">Hassle-Free 7-Day Doorstep Returns</div>
-                  <div className="perk-desc">Easy replacements & dedicated VIP WhatsApp assistance.</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Social Proof Trust Bar */}
-            <div className="auth-trust-box p-3 rounded-4">
-              <div className="d-flex align-items-center gap-3">
-                <div className="trust-avatars d-flex">
-                  <span className="avatar-chip">🧢</span>
-                  <span className="avatar-chip">👟</span>
-                  <span className="avatar-chip">🔥</span>
-                </div>
-                <div>
-                  <div className="trust-score">★ 4.9 / 5.0 Rating</div>
-                  <div className="trust-sub">Trusted by verified streetwear creators across India</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: 3D Interactive Card (Sign In / Register / Forgot) */}
-          <div className="col-12 col-lg-7 auth-form-col">
-            <div className="auth-stage-container">
-              
-              {/* Mode Switcher Tabs */}
-              <div className="auth-nav-tabs mb-4">
-                <button 
-                  className={`auth-tab-btn ${authMode === 'login' ? 'active' : ''}`}
-                  onClick={() => setAuthMode('login')}
-                  type="button"
-                >
-                  <i className="bi bi-box-arrow-in-right me-2"></i>Sign In
-                </button>
-                <button 
-                  className={`auth-tab-btn ${authMode === 'register' ? 'active' : ''}`}
-                  onClick={() => setAuthMode('register')}
-                  type="button"
-                >
-                  <i className="bi bi-stars me-2"></i>Create Account
-                </button>
-                {authMode === 'forgot' && (
-                  <button className="auth-tab-btn active" type="button">
-                    <i className="bi bi-key me-2"></i>Password Reset
-                  </button>
-                )}
-              </div>
-
-              {/* 3D Card Shell */}
-              <div 
-                className="auth-3d-card-shell"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                style={{
-                  transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
-                }}
-              >
-                <div className={`auth-3d-flipper ${authMode === 'register' ? 'is-flipped' : ''}`}>
-                  
-                  {/* =========================================================
-                      FRONT FACE: LOGIN & FORGOT PASSWORD
-                      ========================================================= */}
-                  <div className="auth-card-face auth-card-front">
-                    
-                    {authMode === 'forgot' ? (
-                      /* FORGOT PASSWORD VIEW */
-                      <div className="auth-forgot-panel">
-                        <div className="auth-card-header mb-3">
-                          <div className="brand-hologram-seal">
-                            <span className="seal-bolt">🔑</span>
-                            <span>ACCESS RESTORATION</span>
-                          </div>
-                          <h2 className="auth-title">RESET PASSWORD</h2>
-                          <p className="auth-subtitle">
-                            Enter your registered email and we'll dispatch an official Firebase password reset link.
-                          </p>
-                        </div>
-
-                        {errorMsg && (
-                          <div className="auth-error-banner mb-3">
-                            <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                            <span>{errorMsg}</span>
-                          </div>
-                        )}
-
-                        {successMsg && (
-                          <div className="auth-success-banner mb-3">
-                            <i className="bi bi-check-circle-fill me-2"></i>
-                            <span>{successMsg}</span>
-                          </div>
-                        )}
-
-                        {!forgotSent ? (
-                          <form onSubmit={handleResetSubmit}>
-                            <div className="form-floating-custom mb-3">
-                              <label>Your Registered Email</label>
-                              <div className="input-group-auth">
-                                <i className="bi bi-envelope"></i>
-                                <input
-                                  type="email"
-                                  placeholder="kunal@example.com"
-                                  value={forgotEmail}
-                                  onChange={(e) => setForgotEmail(e.target.value)}
-                                  required
-                                  autoFocus
-                                />
-                              </div>
-                            </div>
-
-                            <button type="submit" className="btn-auth-primary w-100 mb-3" disabled={loading}>
-                              {loading ? (
-                                <span><span className="spinner-border spinner-border-sm me-2"></span>Sending Link...</span>
-                              ) : (
-                                'Dispatch Reset Link ➔'
-                              )}
-                            </button>
-
-                            <button 
-                              type="button" 
-                              className="btn-auth-secondary w-100"
-                              onClick={() => setAuthMode('login')}
-                            >
-                              ← Back to Sign In
-                            </button>
-                          </form>
-                        ) : (
-                          <div className="text-center py-3">
-                            <div className="forgot-success-icon mb-3">✉️</div>
-                            <h4 className="fw-bold mb-2">Check Your Inbox</h4>
-                            <p className="text-muted small mb-4">
-                              We sent reset instructions to <strong>{forgotEmail}</strong>. Follow the link to choose a new password.
-                            </p>
-                            <button 
-                              className="btn-auth-primary w-100"
-                              onClick={() => setAuthMode('login')}
-                            >
-                              Back to Sign In
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      /* LOGIN VIEW */
-                      <div className="auth-login-panel">
-                        <div className="auth-card-header mb-3">
-                          <div className="brand-hologram-seal">
-                            <span className="seal-bolt">⚡</span>
-                            <span>OFFICIAL ACCESS PROTOCOL</span>
-                          </div>
-                          <h2 className="auth-title">SIGN IN TO VILEN'S</h2>
-                          <p className="auth-subtitle">
-                            Welcome back! Enter credentials to manage orders, wishlist & discounts.
-                          </p>
-                        </div>
-
-                        {errorMsg && (
-                          <div className="auth-error-banner mb-3">
-                            <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                            <span>{errorMsg}</span>
-                          </div>
-                        )}
-
-                        <form onSubmit={handleLoginSubmit} className="auth-form">
-                          <div className="form-floating-custom mb-3">
-                            <label>Email Address</label>
-                            <div className="input-group-auth">
-                              <i className="bi bi-envelope"></i>
-                              <input
-                                type="email"
-                                placeholder="kunal@example.com"
-                                value={loginEmail}
-                                onChange={(e) => setLoginEmail(e.target.value)}
-                                required
-                                autoFocus
-                              />
-                            </div>
-                          </div>
-
-                          <div className="form-floating-custom mb-2">
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                              <label className="mb-0">Password</label>
-                              <button 
-                                type="button" 
-                                className="forgot-link-btn"
-                                onClick={() => setAuthMode('forgot')}
-                              >
-                                Forgot password?
-                              </button>
-                            </div>
-                            <div className="input-group-auth">
-                              <i className="bi bi-lock"></i>
-                              <input
-                                type={showLoginPass ? 'text' : 'password'}
-                                placeholder="Enter your password"
-                                value={loginPassword}
-                                onChange={(e) => setLoginPassword(e.target.value)}
-                                required
-                              />
-                              <button 
-                                type="button" 
-                                className="toggle-pass-btn"
-                                onClick={() => setShowLoginPass(!showLoginPass)}
-                                title={showLoginPass ? 'Hide password' : 'Show password'}
-                              >
-                                <i className={`bi ${showLoginPass ? 'bi-eye-slash' : 'bi-eye'}`}></i>
-                              </button>
-                            </div>
-                          </div>
-
-                          <button type="submit" className="btn-auth-primary w-100 mb-3" disabled={loading}>
-                            {loading ? (
-                              <span><span className="spinner-border spinner-border-sm me-2"></span>Signing in...</span>
-                            ) : (
-                              'Enter The Streetwear Club ➔'
-                            )}
-                          </button>
-
-                          <div className="auth-divider mb-3">
-                            <span>OR CONTINUE WITH</span>
-                          </div>
-
-                          <button 
-                            type="button" 
-                            className="btn-google-auth w-100 mb-4"
-                            onClick={handleGoogleSignIn}
-                            disabled={loading}
-                          >
-                            <svg className="google-icon me-2" viewBox="0 0 24 24" width="18" height="18">
-                              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-                              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-                              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-                              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-                            </svg>
-                            <span>Google Account</span>
-                          </button>
-
-                          <div className="auth-flip-footer text-center">
-                            <span>Don't have an account yet?</span>{' '}
-                            <button 
-                              type="button" 
-                              className="flip-trigger-btn"
-                              onClick={() => setAuthMode('register')}
-                            >
-                              Join Crew (3D Flip) 🔄
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    )}
+                {errorMsg && (
+                  <div className="vilen-alert alert-error mb-3">
+                    <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span>{errorMsg}</span>
                   </div>
+                )}
 
-                  {/* =========================================================
-                      BACK FACE: REGISTER (FLIPPED 180 DEG)
-                      ========================================================= */}
-                  <div className="auth-card-face auth-card-back">
-                    <div className="auth-card-header mb-3">
-                      <div className="brand-hologram-seal">
-                        <span className="seal-bolt">⚡</span>
-                        <span>VIP PASS // LIFETIME MEMBERSHIP</span>
-                      </div>
-                      <h2 className="auth-title">CREATE CREW ACCOUNT</h2>
-                      <p className="auth-subtitle">
-                        Unlock ₹100 Welcome Credit & private drops access.
-                      </p>
+                {successMsg && (
+                  <div className="vilen-alert alert-success mb-3">
+                    <i className="bi bi-check-circle-fill me-2"></i>
+                    <span>{successMsg}</span>
+                  </div>
+                )}
+
+                {!forgotSent ? (
+                  <form onSubmit={handleResetSubmit} className="w-100">
+                    <div className="vilen-pill-input-field mb-3">
+                      <i className="bi bi-envelope lead-icon"></i>
+                      <input
+                        type="email"
+                        placeholder="Registered Email"
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        required
+                        autoFocus
+                      />
                     </div>
 
-                    {errorMsg && (
-                      <div className="auth-error-banner mb-3">
-                        <i className="bi bi-exclamation-triangle-fill me-2"></i>
-                        <span>{errorMsg}</span>
-                      </div>
-                    )}
+                    <button 
+                      type="submit" 
+                      className="vilen-action-pill-btn vilen-pill-primary w-100 mb-3"
+                      disabled={loading}
+                    >
+                      {loading ? 'Dispatching...' : 'SEND RESET LINK'}
+                    </button>
 
-                    <form onSubmit={handleRegisterSubmit} className="auth-form">
-                      <div className="form-floating-custom mb-2">
-                        <label>Your Full Name</label>
-                        <div className="input-group-auth">
-                          <i className="bi bi-person"></i>
-                          <input
-                            type="text"
-                            placeholder="Kunal Choudhary"
-                            value={regName}
-                            onChange={(e) => setRegName(e.target.value)}
-                            required
-                          />
-                        </div>
-                      </div>
+                    <button 
+                      type="button" 
+                      className="vilen-link-btn d-block mx-auto"
+                      onClick={() => setIsForgotView(false)}
+                    >
+                      ← Back to Sign In
+                    </button>
+                  </form>
+                ) : (
+                  <div className="text-center py-2">
+                    <div className="fs-1 mb-2">📬</div>
+                    <p className="text-muted small mb-4">
+                      Password reset instructions have been dispatched to <strong>{forgotEmail}</strong>.
+                    </p>
+                    <button 
+                      type="button" 
+                      className="vilen-action-pill-btn vilen-pill-primary"
+                      onClick={() => {
+                        setIsForgotView(false);
+                        setForgotSent(false);
+                      }}
+                    >
+                      Return to Sign In
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Standard Sign In Form */
+              <div className="vilen-signin-subview w-100">
+                <h1 className="vilen-form-head mb-3">SIGN IN</h1>
 
-                      <div className="form-floating-custom mb-2">
-                        <label>Email Address</label>
-                        <div className="input-group-auth">
-                          <i className="bi bi-envelope"></i>
-                          <input
-                            type="email"
-                            placeholder="kunal@example.com"
-                            value={regEmail}
-                            onChange={(e) => setRegEmail(e.target.value)}
-                            required
-                          />
-                        </div>
-                      </div>
+                {/* Circular Social Buttons */}
+                <div className="vilen-social-circles mb-3">
+                  <button 
+                    type="button" 
+                    className="vilen-circle-btn btn-google"
+                    onClick={handleGoogleSignIn}
+                    title="Sign in with Google"
+                    disabled={loading}
+                  >
+                    <i className="bi bi-google"></i>
+                  </button>
+                  <button 
+                    type="button" 
+                    className="vilen-circle-btn btn-facebook"
+                    onClick={() => addToast('Google & Email VIP login active!', 'info')}
+                    title="Facebook login"
+                  >
+                    <i className="bi bi-facebook"></i>
+                  </button>
+                  <button 
+                    type="button" 
+                    className="vilen-circle-btn btn-twitter"
+                    onClick={() => addToast('Google & Email VIP login active!', 'info')}
+                    title="Twitter / X"
+                  >
+                    <i className="bi bi-twitter-x"></i>
+                  </button>
+                </div>
 
-                      <div className="form-floating-custom mb-2">
-                        <label>Create Password</label>
-                        <div className="input-group-auth">
-                          <i className="bi bi-lock"></i>
-                          <input
-                            type={showRegPass ? 'text' : 'password'}
-                            placeholder="Min 6 characters"
-                            value={regPassword}
-                            onChange={(e) => setRegPassword(e.target.value)}
-                            required
-                          />
-                          <button 
-                            type="button" 
-                            className="toggle-pass-btn"
-                            onClick={() => setShowRegPass(!showRegPass)}
-                          >
-                            <i className={`bi ${showRegPass ? 'bi-eye-slash' : 'bi-eye'}`}></i>
-                          </button>
-                        </div>
-                      </div>
+                <div className="vilen-subdivider mb-3">
+                  <span>or use your email account:</span>
+                </div>
 
-                      <div className="form-floating-custom mb-3">
-                        <label>Confirm Password</label>
-                        <div className="input-group-auth">
-                          <i className="bi bi-shield-check"></i>
-                          <input
-                            type={showRegPass ? 'text' : 'password'}
-                            placeholder="Re-type password"
-                            value={regConfirmPass}
-                            onChange={(e) => setRegConfirmPass(e.target.value)}
-                            required
-                          />
-                        </div>
-                      </div>
+                {errorMsg && (
+                  <div className="vilen-alert alert-error mb-3">
+                    <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span>{errorMsg}</span>
+                  </div>
+                )}
 
-                      <div className="vip-bonus-banner mb-3">
-                        <span className="bonus-pill">🎁 10% OFF AUTO-UNLOCKED</span>
-                        <span>Code <strong>VILEN10</strong> will be active on your account!</span>
-                      </div>
-
-                      <button type="submit" className="btn-auth-primary w-100 mb-3" disabled={loading}>
-                        {loading ? (
-                          <span><span className="spinner-border spinner-border-sm me-2"></span>Creating Crew Profile...</span>
-                        ) : (
-                          'Claim VIP Membership ➔'
-                        )}
-                      </button>
-
-                      <button 
-                        type="button" 
-                        className="btn-google-auth w-100 mb-3"
-                        onClick={handleGoogleSignIn}
-                        disabled={loading}
-                      >
-                        <svg className="google-icon me-2" viewBox="0 0 24 24" width="18" height="18">
-                          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-                          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-                          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-                          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-                        </svg>
-                        <span>Fast Sign Up with Google</span>
-                      </button>
-
-                      <div className="auth-flip-footer text-center">
-                        <span>Already have a Crew pass?</span>{' '}
-                        <button 
-                          type="button" 
-                          className="flip-trigger-btn"
-                          onClick={() => setAuthMode('login')}
-                        >
-                          Flip to Sign In 🔄
-                        </button>
-                      </div>
-                    </form>
+                <form onSubmit={handleLoginSubmit} className="w-100">
+                  <div className="vilen-pill-input-field mb-3">
+                    <i className="bi bi-envelope lead-icon"></i>
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      required
+                    />
                   </div>
 
+                  <div className="vilen-pill-input-field mb-2">
+                    <i className="bi bi-lock lead-icon"></i>
+                    <input
+                      type={showLoginPass ? 'text' : 'password'}
+                      placeholder="Password"
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      className="vilen-eye-toggle"
+                      onClick={() => setShowLoginPass(!showLoginPass)}
+                      title={showLoginPass ? 'Hide password' : 'Show password'}
+                    >
+                      <i className={`bi ${showLoginPass ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                    </button>
+                  </div>
+
+                  <div className="text-center mb-3">
+                    <button 
+                      type="button" 
+                      className="vilen-link-btn"
+                      onClick={() => setIsForgotView(true)}
+                    >
+                      Forget your password?
+                    </button>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="vilen-action-pill-btn vilen-pill-primary w-100"
+                    disabled={loading}
+                  >
+                    {loading ? 'SIGNING IN...' : 'SIGN IN'}
+                  </button>
+                </form>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+        {/* =========================================================
+            FORM 2: SIGN UP / REGISTER FORM (Moves to Right 50%)
+            ========================================================= */}
+        <div className="vilen-split-form-panel sign-up-panel">
+          <div className="vilen-form-inner-wrapper">
+            
+            <div className="vilen-brand-badge mb-2">
+              <span className="brand-bolt">⚡</span>
+              <span className="brand-title">VILEN'S</span>
+              <span className="brand-tag">CLOTHES</span>
+            </div>
+
+            <h1 className="vilen-form-head mb-2">CREATE ACCOUNT</h1>
+
+            {/* Circular Social Buttons */}
+            <div className="vilen-social-circles mb-2">
+              <button 
+                type="button" 
+                className="vilen-circle-btn btn-google"
+                onClick={handleGoogleSignIn}
+                title="Sign up with Google"
+                disabled={loading}
+              >
+                <i className="bi bi-google"></i>
+              </button>
+              <button 
+                type="button" 
+                className="vilen-circle-btn btn-facebook"
+                onClick={() => addToast('Google & Email VIP login active!', 'info')}
+                title="Facebook signup"
+              >
+                <i className="bi bi-facebook"></i>
+              </button>
+              <button 
+                type="button" 
+                className="vilen-circle-btn btn-twitter"
+                onClick={() => addToast('Google & Email VIP login active!', 'info')}
+                title="Twitter signup"
+              >
+                <i className="bi bi-twitter-x"></i>
+              </button>
+            </div>
+
+            <div className="vilen-subdivider mb-2">
+              <span>or register with your email:</span>
+            </div>
+
+            {errorMsg && (
+              <div className="vilen-alert alert-error mb-2">
+                <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                <span>{errorMsg}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleRegisterSubmit} className="w-100">
+              <div className="vilen-pill-input-field mb-2">
+                <i className="bi bi-person lead-icon"></i>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={regName}
+                  onChange={(e) => setRegName(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="vilen-pill-input-field mb-2">
+                <i className="bi bi-envelope lead-icon"></i>
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="vilen-pill-input-field mb-2">
+                <i className="bi bi-lock lead-icon"></i>
+                <input
+                  type={showRegPass ? 'text' : 'password'}
+                  placeholder="Password (min 6 chars)"
+                  value={regPassword}
+                  onChange={(e) => setRegPassword(e.target.value)}
+                  required
+                />
+                <button 
+                  type="button" 
+                  className="vilen-eye-toggle"
+                  onClick={() => setShowRegPass(!showRegPass)}
+                >
+                  <i className={`bi ${showRegPass ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                </button>
+              </div>
+
+              <div className="vilen-pill-input-field mb-2">
+                <i className="bi bi-shield-check lead-icon"></i>
+                <input
+                  type={showRegPass ? 'text' : 'password'}
+                  placeholder="Confirm Password"
+                  value={regConfirmPass}
+                  onChange={(e) => setRegConfirmPass(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="vilen-coupon-badge mb-2">
+                <span>🎁 <strong>10% OFF auto-applied</strong> with code <strong>VILEN10</strong></span>
+              </div>
+
+              <button 
+                type="submit" 
+                className="vilen-action-pill-btn vilen-pill-primary w-100"
+                disabled={loading}
+              >
+                {loading ? 'ACTIVATING PASS...' : 'SIGN UP'}
+              </button>
+            </form>
+
+          </div>
+        </div>
+
+        {/* Hidden SVG Definitions for Seamless T-Shirt Masking */}
+        <svg width="0" height="0" style={{ position: 'absolute', pointerEvents: 'none' }} aria-hidden="true">
+          <defs>
+            {/* Left-edge T-Shirt Clip (used when overlay is on the right) */}
+            <clipPath id="tshirtClipLeft" clipPathUnits="objectBoundingBox">
+              <path d="M 0.05,0 C 0.025,0.06 0.015,0.12 0.01,0.18 C 0.0,0.24 0.0,0.28 0.01,0.34 C 0.025,0.40 0.055,0.44 0.05,0.50 C 0.035,0.58 0.02,0.65 0.025,0.72 C 0.035,0.80 0.015,0.88 0.01,0.94 C 0.005,0.97 0.02,0.99 0.05,1.0 L 1.0,1.0 L 1.0,0.0 Z" />
+            </clipPath>
+
+            {/* Right-edge T-Shirt Clip (used when overlay is on the left) */}
+            <clipPath id="tshirtClipRight" clipPathUnits="objectBoundingBox">
+              <path d="M 0.0,0.0 L 0.95,0.0 C 0.975,0.06 0.985,0.12 0.99,0.18 C 1.0,0.24 1.0,0.28 0.99,0.34 C 0.975,0.40 0.945,0.44 0.95,0.50 C 0.965,0.58 0.98,0.65 0.975,0.72 C 0.965,0.80 0.985,0.88 0.99,0.94 C 0.995,0.97 0.98,0.99 0.95,1.0 L 0.0,1.0 Z" />
+            </clipPath>
+          </defs>
+        </svg>
+
+        {/* =========================================================
+            FULL-HEIGHT SLIDING OVERLAY CONTAINER
+            ========================================================= */}
+        <div className="vilen-split-overlay-slider">
+          
+          {/* Animated Tailor Stitching Line (Transparent SVG - NO color seams!) */}
+          <div className="vilen-stitch-seam-wrap" aria-hidden="true">
+            <svg 
+              className="vilen-stitch-svg" 
+              viewBox="0 0 60 1000" 
+              preserveAspectRatio="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M 60,0 C 30,60 18,120 12,180 C 0,240 0,280 12,340 C 30,400 66,440 60,500 C 42,580 24,650 30,720 C 42,800 18,880 12,940 C 6,970 24,990 60,1000" 
+                fill="none" 
+                stroke="#ff5400" 
+                strokeWidth="3.5" 
+                className="animated-tshirt-stitch" 
+              />
+            </svg>
+          </div>
+
+          {/* Authentic Streetwear Woven Side-Seam Tag (Always readable, never mirrored!) */}
+          <div className="vilen-woven-tag" aria-hidden="true">
+            <span className="tag-bolt">⚡</span>
+            <span className="tag-txt">VILEN'S // 240 GSM</span>
+          </div>
+
+          <div className="vilen-overlay-inner-clip">
+            <div className="vilen-split-overlay">
+              
+              {/* OVERLAY PANEL LEFT (Shows when Registering -> Prompts to Sign In) */}
+              <div className="vilen-overlay-screen overlay-screen-left">
+                <div className="vilen-brand-badge brand-light mb-3">
+                  <span className="brand-bolt">⚡</span>
+                  <span className="brand-title">VILEN'S</span>
+                  <span className="brand-tag">CLOTHES</span>
                 </div>
+
+                <h1 className="vilen-overlay-head mb-2">WELCOME BACK</h1>
+                <p className="vilen-overlay-desc mb-4">
+                  To keep connected with us please login with your personal info
+                </p>
+
+                {/* Animated Streetwear Composition */}
+                <div className="vilen-street-art-box mb-4">
+                  <div className="art-pulse-glow"></div>
+                  <div className="floating-item item-main">👕</div>
+                  <div className="floating-item item-kick">👟</div>
+                  <div className="floating-item item-bolt">⚡</div>
+                  <div className="floating-item item-star">✨</div>
+                  <div className="floating-item item-coupon">🏷️ 10% OFF</div>
+                </div>
+
+                <button 
+                  type="button" 
+                  className="vilen-action-pill-btn vilen-pill-ghost"
+                  onClick={() => {
+                    setAuthMode('login');
+                    setIsForgotView(false);
+                  }}
+                >
+                  SIGN IN
+                </button>
+              </div>
+
+              {/* OVERLAY PANEL RIGHT (Shows when Signing In -> Prompts to Register) */}
+              <div className="vilen-overlay-screen overlay-screen-right">
+                <div className="vilen-brand-badge brand-light mb-3">
+                  <span className="brand-bolt">⚡</span>
+                  <span className="brand-title">VILEN'S</span>
+                  <span className="brand-tag">CLOTHES</span>
+                </div>
+
+                <h1 className="vilen-overlay-head mb-2">HELLO, FRIEND!</h1>
+                <p className="vilen-overlay-desc mb-4">
+                  Enter your details & start your journey with Vilen's exclusive streetwear drops
+                </p>
+
+                {/* Animated Streetwear Composition */}
+                <div className="vilen-street-art-box mb-4">
+                  <div className="art-pulse-glow orange-glow"></div>
+                  <div className="floating-item item-main">🧢</div>
+                  <div className="floating-item item-kick">🔥</div>
+                  <div className="floating-item item-bolt">🛍️</div>
+                  <div className="floating-item item-star">✦</div>
+                  <div className="floating-item item-coupon">🎁 ₹100 BONUS</div>
+                </div>
+
+                <button 
+                  type="button" 
+                  className="vilen-action-pill-btn vilen-pill-ghost"
+                  onClick={() => {
+                    setAuthMode('register');
+                    setIsForgotView(false);
+                  }}
+                >
+                  SIGN UP
+                </button>
               </div>
 
             </div>
           </div>
-
         </div>
+
       </div>
+
     </div>
   );
 };
